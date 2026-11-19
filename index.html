@@ -1,0 +1,2253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="carbon">
+  <title>F-GNIX · Grumman AA-5 Traveler Rental &amp; Dispatch (EBKT)</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Carbon) */
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+
+      /* Ink */
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+
+      /* Rules */
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+
+      /* Accents */
+      --primary: #0f62fe;
+      --primary-hover: #0353e9;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --error: #da1e28;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #0f62fe;
+      --data-2: #6929c4;
+      --data-3: #005d5d;
+      --data-4: #9f1853;
+      --data-context: #8d8d8d;
+
+      /* Fonts */
+      --font-headline: 'IBM Plex Sans', sans-serif;
+      --font-body: 'IBM Plex Sans', sans-serif;
+      --font-label: 'IBM Plex Mono', monospace;
+
+      /* Shape */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      /* Style effects */
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.1);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.12);
+      --rule: 1px solid var(--outline-variant);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+
+      /* Shared semantic tokens */
+      --positive: #198038;
+      --warning: #b28600;
+      --focus: #0f62fe;
+
+      /* Type scale (Tool / Dashboard) */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.35rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1240px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, p { margin: 0; }
+    .headline {
+      font-family: var(--font-headline);
+      font-weight: 300;
+      letter-spacing: 0;
+      line-height: 1.18;
+      color: var(--on-surface);
+    }
+    .headline strong { font-weight: 600; }
+    .display-title {
+      font-size: var(--display-size);
+      margin-top: var(--space-xs);
+    }
+    .section-title {
+      font-size: var(--headline-size);
+      font-weight: 300;
+      line-height: 1.2;
+    }
+    .section-title strong { font-weight: 600; }
+    .subhead {
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--on-surface);
+    }
+    .label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .mono {
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+    }
+    .helper {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      line-height: 1.45;
+    }
+    .prose {
+      max-width: 65ch;
+      color: var(--on-surface);
+    }
+
+    /* Header & Masthead */
+    .masthead {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .masthead-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm) var(--space-lg);
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      height: 24px;
+      padding: 0 var(--space-sm);
+      border-radius: var(--rounded-full);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .tag-neutral {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+    .masthead-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: end;
+    }
+    .nav-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      border-top: var(--rule);
+      padding-top: var(--space-sm);
+    }
+    .nav-link {
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--primary);
+      text-decoration: none;
+      padding: var(--space-xs) 0;
+      border-bottom: 2px solid transparent;
+      transition: border-color var(--dur-micro) var(--ease-out);
+    }
+    .nav-link:hover {
+      border-bottom-color: var(--primary);
+    }
+
+    /* Key Metrics Bar */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .tile {
+      background: var(--surface-container);
+      border-radius: 0;
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-xs);
+      align-content: start;
+    }
+    .tile-nested {
+      background: var(--surface-container-high);
+      border-radius: 0;
+      padding: var(--space-md);
+    }
+    .key-tile {
+      border-bottom: var(--indicator);
+    }
+    .key-value {
+      font-family: var(--font-label);
+      font-weight: 300;
+      font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+      line-height: 1.15;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Section Shell */
+    .section-block {
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .section-head {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-sm);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm) var(--space-lg);
+    }
+
+    /* Asymmetric Layout Grids */
+    .split-8-4 {
+      display: grid;
+      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .split-7-5 {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .split-6-6 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .card-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .card-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    /* Tables */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    table.data-table thead th {
+      background: var(--surface-container-high);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--on-surface-variant);
+      font-weight: 500;
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+      white-space: nowrap;
+    }
+    table.data-table tbody td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+      vertical-align: top;
+      color: var(--on-surface);
+    }
+    table.data-table tbody tr:nth-child(even) {
+      background: var(--surface-container);
+    }
+    table.data-table th.num,
+    table.data-table td.num {
+      text-align: right;
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    table.data-table tbody tr.is-selected {
+      background: var(--primary-container);
+    }
+    table.data-table tbody tr.is-selected td {
+      color: var(--on-primary-container);
+      font-weight: 500;
+    }
+
+    /* List with hairline rules */
+    .ruled-list {
+      display: grid;
+      gap: 0;
+    }
+    .ruled-list > * {
+      padding: var(--space-sm) 0;
+    }
+    .ruled-list > * + * {
+      border-top: var(--rule);
+    }
+
+    /* Gallery Cards */
+    .gallery-card {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-md);
+      align-content: start;
+      border-bottom: 2px solid transparent;
+      transition: border-color var(--dur-short) var(--ease-out);
+    }
+    .gallery-card.is-inspected {
+      border-bottom: var(--indicator);
+    }
+    .schematic-frame {
+      background: var(--background);
+      border: var(--rule);
+      padding: var(--space-md);
+      aspect-ratio: 16 / 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .schematic-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .svg-stroke {
+      stroke: var(--on-surface);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+    }
+    .svg-stroke-muted {
+      stroke: var(--outline);
+      fill: none;
+      stroke-width: 1;
+      stroke-dasharray: 3 3;
+    }
+    .svg-stroke-accent {
+      stroke: var(--primary);
+      fill: none;
+      stroke-width: 2;
+    }
+    .svg-fill-surface {
+      fill: var(--surface-container);
+      stroke: var(--on-surface);
+      stroke-width: 1.25;
+    }
+    .svg-fill-accent {
+      fill: var(--primary-container);
+      stroke: var(--primary);
+      stroke-width: 1.25;
+    }
+    .svg-text {
+      font-family: var(--font-label);
+      font-size: 9px;
+      fill: var(--on-surface-variant);
+      letter-spacing: 0.08em;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg) var(--space-sm) var(--space-md);
+      border-radius: 0;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 400;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-align: left;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .btn-compact {
+      min-height: 40px;
+      padding: var(--space-xs) var(--space-md);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+    .btn-secondary {
+      background: var(--background);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--primary);
+      padding-left: var(--space-sm);
+      padding-right: var(--space-sm);
+    }
+    .btn-ghost:hover:not(:disabled) {
+      background: var(--surface-container);
+    }
+    .btn-danger-ghost {
+      background: transparent;
+      color: var(--error);
+      border: 1px solid var(--outline-variant);
+      padding-left: var(--space-md);
+      padding-right: var(--space-md);
+    }
+    .btn-danger-ghost:hover:not(:disabled) {
+      background: var(--surface-container);
+      border-color: var(--error);
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    /* Interactive Tabs / Segmented Strip (Carbon style) */
+    .tab-strip {
+      display: flex;
+      flex-wrap: wrap;
+      border-bottom: var(--rule);
+      gap: var(--space-lg);
+    }
+    .tab-btn {
+      background: transparent;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      padding: var(--space-sm) 0;
+      min-height: 44px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      transition: color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .tab-btn:hover {
+      color: var(--on-surface);
+    }
+    .tab-btn.is-active {
+      color: var(--on-surface);
+      font-weight: 600;
+      border-bottom-color: var(--primary);
+    }
+
+    /* Pricing Tier Cards */
+    .tier-card {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-sm);
+      align-content: start;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      text-align: left;
+      border-top: 0;
+      border-left: 0;
+      border-right: 0;
+      width: 100%;
+      font-family: inherit;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .tier-card:hover {
+      background: var(--surface-container-high);
+    }
+    .tier-card.is-active {
+      border-bottom: var(--indicator);
+      background: var(--surface-container);
+    }
+    .tier-card.is-active:hover {
+      background: var(--surface-container);
+    }
+
+    /* Inputs & Controls */
+    .field-group {
+      display: grid;
+      gap: var(--space-xs);
+      align-content: start;
+    }
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--on-surface-variant);
+      font-family: var(--font-body);
+    }
+    .field-input, .field-select {
+      width: 100%;
+      height: 40px;
+      background: var(--background);
+      border: 0;
+      border-bottom: var(--field-rule);
+      border-radius: var(--rounded);
+      padding: 0 var(--space-md);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+      transition: border-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .layer-white-inputs .field-input,
+    .layer-white-inputs .field-select {
+      background: var(--surface-container);
+    }
+    .field-select {
+      padding-right: var(--space-xl);
+    }
+    .field-input.has-error {
+      border-bottom-color: var(--error);
+    }
+    .field-row-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-md);
+      align-items: end;
+    }
+    .field-row-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+      align-items: end;
+    }
+    .range-pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 96px;
+      gap: var(--space-md);
+      align-items: center;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      height: 44px;
+      cursor: pointer;
+    }
+
+    /* Calendar Widget */
+    .calendar-shell {
+      background: var(--background);
+      border: var(--rule);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-sm);
+    }
+    .calendar-weekdays,
+    .calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 2px;
+    }
+    .calendar-weekday {
+      text-align: center;
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+      padding: var(--space-xs) 0;
+    }
+    .cal-day {
+      min-height: 44px;
+      border: 1px solid transparent;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: 0.8125rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 2px;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .cal-day:hover:not(:disabled) {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .cal-day.is-outside {
+      color: var(--outline);
+      cursor: default;
+    }
+    .cal-day:disabled {
+      color: var(--outline);
+      cursor: not-allowed;
+      background: var(--background);
+    }
+    .cal-day.is-today {
+      border-color: var(--outline);
+      font-weight: 600;
+    }
+    .cal-day.is-in-range {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .cal-day.is-endpoint {
+      background: var(--primary);
+      color: var(--on-primary);
+      font-weight: 600;
+    }
+    .cal-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 0;
+      background: var(--tertiary);
+    }
+    .cal-day.is-endpoint .cal-dot {
+      background: var(--on-primary);
+    }
+
+    /* Notification Strips */
+    .notice {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      border-left: 3px solid var(--primary);
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .notice-nested {
+      background: var(--background);
+    }
+    .notice-success { border-left-color: var(--tertiary); }
+    .notice-warning { border-left-color: var(--warning); }
+    .notice-error { border-left-color: var(--error); }
+
+    /* Hours Comparison Bar */
+    .meter-track {
+      height: 12px;
+      background: var(--surface-container-high);
+      width: 100%;
+      position: relative;
+      display: flex;
+    }
+    .meter-fill-est {
+      background: var(--data-1);
+      height: 100%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .meter-fill-gap {
+      background: var(--warning);
+      height: 100%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Checklist */
+    .check-item {
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) auto;
+      gap: var(--space-md);
+      align-items: start;
+      padding: var(--space-md) 0;
+      cursor: pointer;
+    }
+    .check-item + .check-item {
+      border-top: var(--rule);
+    }
+    .check-box {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+    .progress-bar-bg {
+      height: 8px;
+      background: var(--surface-container-high);
+      width: 100%;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--tertiary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Container Queries */
+    .card-wrapper { container-type: inline-size; }
+    @container (max-width: 420px) {
+      .field-row-2, .field-row-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Mobile Breakpoint */
+    @media (max-width: 900px) {
+      .masthead-top,
+      .split-8-4,
+      .split-7-5,
+      .split-6-6 {
+        grid-template-columns: 1fr;
+      }
+      .kpi-grid,
+      .card-grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .card-grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .kpi-grid,
+      .card-grid-4,
+      .field-row-2,
+      .field-row-3 {
+        grid-template-columns: 1fr;
+      }
+      .range-pair {
+        grid-template-columns: 1fr;
+      }
+      .check-item {
+        grid-template-columns: 24px minmax(0, 1fr);
+      }
+    }
+
+    /* Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+
+    <!-- MASTHEAD -->
+    <header class="masthead">
+      <div class="masthead-meta">
+        <span class="label">EBKT &middot; Kortrijk-Wevelgem Airport</span>
+        <span class="tag">F-GNIX</span>
+        <span class="tag tag-neutral">1976 Grumman AA-5 Traveler</span>
+        <span class="tag tag-neutral">EASA Part-ML</span>
+      </div>
+
+      <div class="masthead-top">
+        <div>
+          <h1 class="headline display-title">Grumman AA-5 Traveler <strong>F-GNIX Dispatch &amp; Rental</strong></h1>
+        </div>
+        <p class="helper">
+          Four-seat VFR touring and time-building aircraft based at Kortrijk-Wevelgem (EBKT), operated by MikeDelta for RSLeasing. Transparent wet hourly rates, multi-day booking estimator, and syndicate block management.
+        </p>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="tile key-tile">
+          <span class="label">Pay-As-You-Go Rate</span>
+          <span class="key-value">&euro;240.00</span>
+          <span class="helper">Per Hobbs hr wet incl. VAT (&euro;4.00/min)</span>
+        </div>
+        <div class="tile">
+          <span class="label">Block Rate Floor</span>
+          <span class="key-value">&euro;198.00</span>
+          <span class="helper">50-hr block (&euro;3.30/min wet incl. VAT)</span>
+        </div>
+        <div class="tile">
+          <span class="label">Multi-Day Minimum</span>
+          <span class="key-value">1.5 hrs/day</span>
+          <span class="helper">Applies to trips &ge; 2 consecutive days</span>
+        </div>
+        <div class="tile">
+          <span class="label">Cruise Performance</span>
+          <span class="key-value">105&ndash;110 kt</span>
+          <span class="helper">Rebuilt Lycoming O-320-E2G (~40 L/hr)</span>
+        </div>
+      </div>
+
+      <nav class="nav-strip" aria-label="Primary sections">
+        <a class="nav-link" href="#showcase">1. Aircraft Showcase</a>
+        <a class="nav-link" href="#pricing">2. Transparent Pricing &amp; Group Blocks</a>
+        <a class="nav-link" href="#estimator">3. Booking &amp; Cost Estimator</a>
+        <a class="nav-link" href="#onboarding">4. Pilot Dashboard &amp; Covenants</a>
+      </nav>
+    </header>
+
+    <!-- SECTION 1: AIRCRAFT SHOWCASE -->
+    <section id="showcase" class="section-block">
+      <div class="section-head">
+        <div>
+          <span class="label">Section 01 &middot; Technical Specification &amp; Condition</span>
+          <h2 class="section-title">Aircraft <strong>Showcase</strong></h2>
+        </div>
+        <span class="label">S/N AA5-0643 &middot; Mode S &amp; 8.33 kHz Compliant</span>
+      </div>
+
+      <div class="split-8-4">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Specification</th>
+                <th>Operational Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Airframe &amp; Year</strong></td>
+                <td class="mono">1976 Grumman AA-5 Traveler</td>
+                <td>4-seat (1 pilot + 3 passengers), sliding bubble canopy</td>
+              </tr>
+              <tr>
+                <td><strong>Registration &amp; Serial</strong></td>
+                <td class="mono">F-GNIX &middot; AA5-0643</td>
+                <td>Base airport: Kortrijk-Wevelgem (EBKT), Belgium</td>
+              </tr>
+              <tr>
+                <td><strong>Powerplant</strong></td>
+                <td class="mono">Lycoming O-320-E2G</td>
+                <td>Freshly rebuilt: new crankshaft, new cylinders, new magnetos</td>
+              </tr>
+              <tr>
+                <td><strong>Propeller</strong></td>
+                <td class="mono">McCauley Fixed-Pitch</td>
+                <td>Freshly overhauled in conjunction with engine rebuild</td>
+              </tr>
+              <tr>
+                <td><strong>Cruise &amp; Fuel Burn</strong></td>
+                <td class="mono">105&ndash;110 kt TAS &middot; ~40 L/hr</td>
+                <td>AVGAS 100LL; wet rates include fuel &amp; 21% Belgian VAT</td>
+              </tr>
+              <tr>
+                <td><strong>MTOW &amp; Avionics</strong></td>
+                <td class="mono">996.6 kg &middot; VFR Day/Night</td>
+                <td>Mode S transponder &amp; 8.33 kHz COM compliant (no GPS)</td>
+              </tr>
+              <tr>
+                <td><strong>Maintenance Program</strong></td>
+                <td class="mono">EASA Part-ML AMP</td>
+                <td>50h / 100h intervals tracked on Tach; billing via Hobbs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <aside class="tile" style="display: grid; gap: var(--space-md);">
+          <span class="label">Mechanical Condition Summary</span>
+          <h3 class="subhead">Freshly Rebuilt Firewall-Forward</h3>
+          <p class="helper">
+            F-GNIX completed a comprehensive 4-year airframe restoration and full firewall-forward overhaul prior to EBKT commercial deployment.
+          </p>
+          <div class="ruled-list">
+            <div>
+              <div class="label">Crankshaft &amp; Bottom End</div>
+              <div style="font-size: 0.875rem;">New factory crankshaft installed at rebuild.</div>
+            </div>
+            <div>
+              <div class="label">Top End &amp; Ignition</div>
+              <div style="font-size: 0.875rem;">New cylinder assemblies and dual magnetos.</div>
+            </div>
+            <div>
+              <div class="label">Propeller Assembly</div>
+              <div style="font-size: 0.875rem;">McCauley propeller freshly overhauled and balanced.</div>
+            </div>
+            <div>
+              <div class="label">Airspace Readiness</div>
+              <div style="font-size: 0.875rem;">Mode S &amp; 8.33 kHz COM verified for EU VFR touring.</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Inspection Gallery Placeholders (Exterior, Engine Bay, Interior) -->
+      <div>
+        <div class="tab-strip" role="tablist" aria-label="Aircraft inspection views">
+          <button type="button" class="tab-btn is-active" id="tab-gal-all" onclick="setGalleryFocus('all')">All Inspection Views (3)</button>
+          <button type="button" class="tab-btn" id="tab-gal-exterior" onclick="setGalleryFocus('exterior')">Exterior Airframe</button>
+          <button type="button" class="tab-btn" id="tab-gal-engine" onclick="setGalleryFocus('engine')">Engine Bay (Rebuilt O-320)</button>
+          <button type="button" class="tab-btn" id="tab-gal-interior" onclick="setGalleryFocus('interior')">Interior &amp; Flight Deck</button>
+        </div>
+      </div>
+
+      <div class="card-grid-3">
+        <!-- Card 1: Exterior -->
+        <article class="gallery-card" id="gal-card-exterior">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="label">01 &middot; Exterior</span>
+            <span class="tag tag-neutral">Restored Airframe</span>
+          </div>
+          <div class="schematic-frame">
+            <svg class="schematic-svg" viewBox="0 0 320 200" aria-hidden="true">
+              <!-- Reference datum line -->
+              <line class="svg-stroke-muted" x1="16" y1="128" x2="304" y2="128" />
+              <!-- Ground line -->
+              <line class="svg-stroke-muted" x1="20" y1="176" x2="300" y2="176" />
+              <!-- Fuselage silhouette (Grumman AA-5 Traveler side profile) -->
+              <path class="svg-fill-surface" d="M 52 108 L 88 100 L 116 74 L 182 74 L 214 96 L 278 102 L 284 62 L 300 62 L 294 114 L 280 124 L 188 128 L 96 130 L 52 124 Z" />
+              <!-- Sliding canopy glazing -->
+              <path class="svg-fill-accent" d="M 118 78 L 178 78 L 204 96 L 106 98 Z" />
+              <line class="svg-stroke-accent" x1="148" y1="78" x2="148" y2="98" />
+              <!-- Spinner & Prop -->
+              <path class="svg-fill-surface" d="M 40 116 L 52 109 L 52 123 Z" />
+              <line class="svg-stroke" x1="45" y1="76" x2="45" y2="154" />
+              <!-- Low wing section -->
+              <rect class="svg-fill-surface" x="122" y="122" width="52" height="10" />
+              <!-- Main & Free-castering Nose Gear -->
+              <line class="svg-stroke" x1="80" y1="128" x2="76" y2="164" />
+              <circle class="svg-fill-surface" cx="76" cy="168" r="7" />
+              <line class="svg-stroke" x1="162" y1="130" x2="166" y2="162" />
+              <circle class="svg-fill-surface" cx="166" cy="167" r="9" />
+              <!-- Tail registration callout -->
+              <text class="svg-text" x="218" y="114">F-GNIX</text>
+              <text class="svg-text" x="24" y="24">AA-5 PROFILE · SLIDING CANOPY · 105–110 KT</text>
+            </svg>
+          </div>
+          <h3 class="subhead">Exterior Airframe &amp; Canopy</h3>
+          <p class="helper">
+            Bonded aluminum airframe with clean paint finish, sliding tinted canopy (inflight partial-open capable), and free-castering nosewheel steering via differential braking.
+          </p>
+        </article>
+
+        <!-- Card 2: Engine Bay -->
+        <article class="gallery-card" id="gal-card-engine">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="label">02 &middot; Engine Bay</span>
+            <span class="tag">Fresh Rebuild</span>
+          </div>
+          <div class="schematic-frame">
+            <svg class="schematic-svg" viewBox="0 0 320 200" aria-hidden="true">
+              <!-- Centerline -->
+              <line class="svg-stroke-muted" x1="160" y1="22" x2="160" y2="184" />
+              <line class="svg-stroke-muted" x1="24" y1="104" x2="296" y2="104" />
+              <!-- Crankcase -->
+              <rect class="svg-fill-surface" x="132" y="56" width="56" height="96" />
+              <!-- Crankshaft highlight -->
+              <rect class="svg-fill-accent" x="152" y="34" width="16" height="118" />
+              <!-- 4 Horizontally Opposed Cylinders -->
+              <rect class="svg-fill-accent" x="72" y="64" width="60" height="30" />
+              <rect class="svg-fill-accent" x="72" y="112" width="60" height="30" />
+              <rect class="svg-fill-accent" x="188" y="64" width="60" height="30" />
+              <rect class="svg-fill-accent" x="188" y="112" width="60" height="30" />
+              <!-- Cooling fins -->
+              <line class="svg-stroke" x1="88" y1="64" x2="88" y2="94" />
+              <line class="svg-stroke" x1="104" y1="64" x2="104" y2="94" />
+              <line class="svg-stroke" x1="88" y1="112" x2="88" y2="142" />
+              <line class="svg-stroke" x1="104" y1="112" x2="104" y2="142" />
+              <line class="svg-stroke" x1="216" y1="64" x2="216" y2="94" />
+              <line class="svg-stroke" x1="232" y1="64" x2="232" y2="94" />
+              <line class="svg-stroke" x1="216" y1="112" x2="216" y2="142" />
+              <line class="svg-stroke" x1="232" y1="112" x2="232" y2="142" />
+              <!-- Dual Magnetos -->
+              <rect class="svg-fill-surface" x="134" y="156" width="22" height="22" />
+              <rect class="svg-fill-surface" x="164" y="156" width="22" height="22" />
+              <!-- Overhauled Prop Flange -->
+              <line class="svg-stroke-accent" x1="94" y1="30" x2="226" y2="30" />
+              <text class="svg-text" x="24" y="20">LYCOMING O-320-E2G · NEW CRANK, CYLINDERS &amp; MAGS</text>
+              <text class="svg-text" x="196" y="172">DUAL MAGS</text>
+            </svg>
+          </div>
+          <h3 class="subhead">Pristine Rebuilt Powerplant</h3>
+          <p class="helper">
+            Lycoming O-320-E2G rebuilt with new crankshaft, new cylinders, and new dual magnetos, paired with an overhauled McCauley propeller for dependable dispatch reliability.
+          </p>
+        </article>
+
+        <!-- Card 3: Interior -->
+        <article class="gallery-card" id="gal-card-interior">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="label">03 &middot; Interior</span>
+            <span class="tag tag-neutral">1+3 Cabin &middot; VFR</span>
+          </div>
+          <div class="schematic-frame">
+            <svg class="schematic-svg" viewBox="0 0 320 200" aria-hidden="true">
+              <!-- Instrument panel outline -->
+              <rect class="svg-fill-surface" x="28" y="34" width="264" height="132" />
+              <!-- Primary Six-Pack -->
+              <circle class="svg-fill-surface" cx="68" cy="70" r="15" />
+              <circle class="svg-fill-surface" cx="106" cy="70" r="15" />
+              <circle class="svg-fill-surface" cx="144" cy="70" r="15" />
+              <circle class="svg-fill-surface" cx="68" cy="108" r="15" />
+              <circle class="svg-fill-surface" cx="106" cy="108" r="15" />
+              <circle class="svg-fill-surface" cx="144" cy="108" r="15" />
+              <!-- Avionics Stack (8.33 COM + Mode S) -->
+              <rect class="svg-fill-accent" x="176" y="54" width="96" height="24" />
+              <rect class="svg-fill-accent" x="176" y="84" width="96" height="24" />
+              <rect class="svg-fill-surface" x="176" y="114" width="96" height="24" />
+              <!-- Control Yoke Shafts -->
+              <circle class="svg-stroke" cx="106" cy="146" r="10" />
+              <circle class="svg-stroke" cx="224" cy="146" r="10" />
+              <text class="svg-text" x="184" y="69">8.33 KHZ COM</text>
+              <text class="svg-text" x="184" y="99">MODE S XPDR</text>
+              <text class="svg-text" x="184" y="129">HOBBS / TACH</text>
+              <text class="svg-text" x="28" y="24">4-SEAT CABIN · VFR PANEL · NO GPS INSTALLED</text>
+            </svg>
+          </div>
+          <h3 class="subhead">4-Seat Cabin &amp; VFR Avionics</h3>
+          <p class="helper">
+            Ergonomic 1+3 touring cabin with panoramic canopy visibility, Mode S transponder, and 8.33 kHz COM radio. Dual Hobbs (billing) and Tachometer (maintenance) meters.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION 2: TRANSPARENT PRICING & GROUP BLOCKS -->
+    <section id="pricing" class="section-block">
+      <div class="section-head">
+        <div>
+          <span class="label">Section 02 &middot; Wet Hourly Tariffs &amp; Syndicate Blocks</span>
+          <h2 class="section-title">Transparent <strong>Pricing</strong></h2>
+        </div>
+        <span class="label">All rates wet &middot; Fuel &amp; 21% Belgian VAT included</span>
+      </div>
+
+      <p class="prose helper">
+        Select any tariff tier below to load it directly into the Booking &amp; Cost Estimator. Volume blocks lock in discounted wet rates for 365 days; 25-hour and 50-hour blocks support Group Rental pooling for 3 to 4 vetted pilots under one master account.
+      </p>
+
+      <div class="card-grid-4">
+        <button type="button" class="tier-card" id="tier-card-payg" onclick="selectTier('payg')">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="label">Standard</span>
+            <span class="tag tag-neutral">0% Discount</span>
+          </div>
+          <h3 class="subhead">Pay-As-You-Go</h3>
+          <div class="key-value">&euro;240<span style="font-size: 1rem;">.00/hr</span></div>
+          <div class="mono helper">&euro;4.00 / minute &middot; Billed post-flight</div>
+          <div class="helper" style="border-top: var(--rule); padding-top: var(--space-xs);">
+            No upfront commitment. Solo pilots &amp; ad-hoc VFR flights.
+          </div>
+        </button>
+
+        <button type="button" class="tier-card" id="tier-card-10h" onclick="selectTier('10h')">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="label">10-Hour Block</span>
+            <span class="tag tag-neutral">-6.25%</span>
+          </div>
+          <h3 class="subhead">10h Flight Pack</h3>
+          <div class="key-value">&euro;225<span style="font-size: 1rem;">.00/hr</span></div>
+          <div class="mono helper">&euro;3.75 / minute &middot; &euro;2,250.00 total</div>
+          <div class="helper" style="border-top: var(--rule); padding-top: var(--space-xs);">
+            365-day validity. Ideal for currency &amp; weekend trips.
+          </div>
+        </button>
+
+        <button type="button" class="tier-card is-active" id="tier-card-25h" onclick="selectTier('25h')">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="label">25-Hour Block</span>
+            <span class="tag">Group Eligible</span>
+          </div>
+          <h3 class="subhead">25h Flight Pack</h3>
+          <div class="key-value">&euro;210<span style="font-size: 1rem;">.00/hr</span></div>
+          <div class="mono helper">&euro;3.50 / minute &middot; &euro;5,250.00 total</div>
+          <div class="helper" style="border-top: var(--rule); padding-top: var(--space-xs);">
+            -12.5% discount. Poolable by 3&ndash;4 syndicate pilots.
+          </div>
+        </button>
+
+        <button type="button" class="tier-card" id="tier-card-50h" onclick="selectTier('50h')">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="label">50-Hour Block</span>
+            <span class="tag">Group Eligible</span>
+          </div>
+          <h3 class="subhead">50h Flight Pack</h3>
+          <div class="key-value">&euro;198<span style="font-size: 1rem;">.00/hr</span></div>
+          <div class="mono helper">&euro;3.30 / minute &middot; &euro;9,900.00 total</div>
+          <div class="helper" style="border-top: var(--rule); padding-top: var(--space-xs);">
+            -17.5% maximum discount. Poolable by 3&ndash;4 syndicate pilots.
+          </div>
+        </button>
+      </div>
+
+      <!-- Group Rental Syndicate Pooling Panel -->
+      <div class="tile split-6-6">
+        <div style="display: grid; gap: var(--space-md);">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+            <span class="label">Group Rental Feature &middot; Syndicate Block Pooling</span>
+            <span class="tag">3&ndash;4 Pilots</span>
+          </div>
+          <h3 class="subhead">Joint Purchase Under One Master Account</h3>
+          <p class="helper">
+            Groups of 3 or 4 vetted pilots (such as newly rated PPL holders or hour-builders) can pool funds to purchase a <strong>25-hour</strong> or <strong>50-hour</strong> block jointly. All syndicate members share the prepaid hour balance under one master account while logging their own individual flight legs as PIC.
+          </p>
+          <div class="field-group">
+            <span class="field-label">Preview Syndicate Split Size</span>
+            <div class="btn-row">
+              <button type="button" class="btn btn-compact btn-primary" id="btn-syn-3" onclick="setSyndicatePreview(3)">3 Pilots</button>
+              <button type="button" class="btn btn-compact btn-secondary" id="btn-syn-4" onclick="setSyndicatePreview(4)">4 Pilots</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Syndicate Block</th>
+                <th class="num">Total Pack</th>
+                <th class="num">Rate / Hr</th>
+                <th class="num" id="th-syn-per-pilot">Per Pilot (3)</th>
+                <th class="num">Hours / Pilot</th>
+              </tr>
+            </thead>
+            <tbody id="syndicate-table-body">
+              <tr>
+                <td><strong>25-Hour Group Block</strong></td>
+                <td class="num">&euro;5,250.00</td>
+                <td class="num">&euro;210.00</td>
+                <td class="num" id="syn-25-cost">&euro;1,750.00</td>
+                <td class="num" id="syn-25-hrs">8.3 hrs avg</td>
+              </tr>
+              <tr>
+                <td><strong>50-Hour Group Block</strong></td>
+                <td class="num">&euro;9,900.00</td>
+                <td class="num">&euro;198.00</td>
+                <td class="num" id="syn-50-cost">&euro;3,300.00</td>
+                <td class="num" id="syn-50-hrs">16.7 hrs avg</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: INTERACTIVE BOOKING & ESTIMATOR TOOL -->
+    <section id="estimator" class="section-block">
+      <div class="section-head">
+        <div>
+          <span class="label">Section 03 &middot; Trip Planner &amp; Daily Minimum Engine</span>
+          <h2 class="section-title">Booking &amp; <strong>Cost Estimator</strong></h2>
+        </div>
+        <span class="label">Mandatory 1.5 Hobbs hrs/day minimum for &ge; 2 consecutive days</span>
+      </div>
+
+      <div class="split-7-5">
+        <!-- LEFT: INPUTS & INTERACTIVE CALENDAR -->
+        <div class="tile card-wrapper" style="display: grid; gap: var(--space-lg);">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+            <span class="label">Step 1 &middot; Select Dates &amp; Trip Parameters</span>
+            <div class="btn-row">
+              <button type="button" class="btn btn-compact btn-secondary" onclick="applyTripPreset(1, 2.0)">1-Day Flight</button>
+              <button type="button" class="btn btn-compact btn-secondary" onclick="applyTripPreset(2, 2.5)">2-Day Weekend</button>
+              <button type="button" class="btn btn-compact btn-secondary" onclick="applyTripPreset(4, 6.0)">4-Day Tour</button>
+            </div>
+          </div>
+
+          <!-- Interactive Monthly Calendar -->
+          <div class="calendar-shell">
+            <div class="calendar-header">
+              <button type="button" class="btn btn-compact btn-ghost" onclick="shiftCalendarMonth(-1)" aria-label="Previous month">
+                <i data-lucide="chevron-left" style="width:16px;height:16px;" aria-hidden="true"></i> Prev
+              </button>
+              <div class="mono" id="calendar-month-label" style="font-weight: 600; font-size: 0.9375rem;">November 2026</div>
+              <button type="button" class="btn btn-compact btn-ghost" onclick="shiftCalendarMonth(1)" aria-label="Next month">
+                Next <i data-lucide="chevron-right" style="width:16px;height:16px;" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="calendar-weekdays" aria-hidden="true">
+              <div class="calendar-weekday">MON</div>
+              <div class="calendar-weekday">TUE</div>
+              <div class="calendar-weekday">WED</div>
+              <div class="calendar-weekday">THU</div>
+              <div class="calendar-weekday">FRI</div>
+              <div class="calendar-weekday">SAT</div>
+              <div class="calendar-weekday">SUN</div>
+            </div>
+            <div class="calendar-days" id="calendar-days-grid" role="grid" aria-label="Booking calendar"></div>
+            <div class="helper" id="calendar-selection-hint">
+              Click a departure date and return date on the calendar, or adjust the date fields below.
+            </div>
+          </div>
+
+          <!-- Date Fields -->
+          <div class="field-row-2">
+            <div class="field-group">
+              <label class="field-label" for="input-start-date">Departure Date</label>
+              <input class="field-input mono" type="date" id="input-start-date" min="2026-11-19" onchange="onDateInputChange()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="input-end-date">Return Date</label>
+              <input class="field-input mono" type="date" id="input-end-date" min="2026-11-19" onchange="onDateInputChange()">
+            </div>
+          </div>
+
+          <!-- Estimated Flight Hours Slider + Number Sync -->
+          <div class="field-group">
+            <label class="field-label" for="input-hours">Estimated Planned Flight Hours (Hobbs)</label>
+            <div class="range-pair">
+              <input type="range" id="slider-hours" min="0.5" max="24.0" step="0.5" value="2.5" oninput="syncHoursFromSlider(this.value)" aria-label="Estimated flight hours slider">
+              <input class="field-input mono" type="number" id="input-hours" min="0.5" max="40" step="0.5" value="2.5" oninput="syncHoursFromInput(this.value)">
+            </div>
+            <span class="helper">Hobbs meter time captures engine start to shutdown. Multi-day minimum is 1.5 hrs per calendar day.</span>
+          </div>
+
+          <!-- Tariff & Pilot Split -->
+          <div class="field-row-2">
+            <div class="field-group">
+              <label class="field-label" for="select-tier">Tariff / Block Tier</label>
+              <select class="field-select" id="select-tier" onchange="onTierSelectChange(this.value)">
+                <option value="payg">Pay-As-You-Go (&euro;240.00/hr)</option>
+                <option value="10h">10-Hour Block (&euro;225.00/hr)</option>
+                <option value="25h" selected>25-Hour Block (&euro;210.00/hr)</option>
+                <option value="50h">50-Hour Block (&euro;198.00/hr)</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="select-pilots">Pilot Billing Split</label>
+              <select class="field-select" id="select-pilots" onchange="onPilotSplitChange(this.value)">
+                <option value="1" selected>Solo Pilot (1 Pilot)</option>
+                <option value="3">Syndicate Group (3 Pilots)</option>
+                <option value="4">Syndicate Group (4 Pilots)</option>
+              </select>
+            </div>
+          </div>
+          <div id="estimator-validation-msg" class="helper" style="color: var(--error); min-height: 1.2em;"></div>
+        </div>
+
+        <!-- RIGHT: LIVE COST BREAKDOWN & BOOKING SUBMISSION -->
+        <div style="display: grid; gap: var(--space-md);">
+          <!-- Lead with Result -->
+          <div class="tile key-tile" style="display: grid; gap: var(--space-md);">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+              <span class="label">Estimated Trip Billing</span>
+              <span class="tag" id="out-tier-badge">25-Hour Block</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-md);">
+              <div>
+                <div class="label">Total Trip Cost</div>
+                <div class="key-value" id="out-total-cost">&euro;630.00</div>
+                <div class="helper" id="out-vat-sub">Excl. VAT: &euro;520.66</div>
+              </div>
+              <div>
+                <div class="label">Billable Hobbs</div>
+                <div class="key-value" id="out-billable-hours">3.0 hrs</div>
+                <div class="helper" id="out-duration-sub">2 consecutive days</div>
+              </div>
+            </div>
+
+            <!-- Daily Minimum Status Banner -->
+            <div class="notice notice-nested notice-warning" id="out-min-notice">
+              <div class="label" id="out-min-status-label">Daily Minimum Rule Active (+0.5h Adjustment)</div>
+              <div class="helper" id="out-min-status-text">
+                2-day booking requires at least 3.0 Hobbs hours (1.5h/day). Your 2.5h estimate is below the minimum, so 3.0h is billed.
+              </div>
+            </div>
+
+            <!-- Visual Hours Comparison Meter -->
+            <div style="display: grid; gap: var(--space-xs);">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem;" class="mono">
+                <span id="meter-left-label">Estimated: 2.5h</span>
+                <span id="meter-right-label">Minimum: 3.0h</span>
+              </div>
+              <div class="meter-track" aria-hidden="true">
+                <div class="meter-fill-est" id="meter-fill-est" style="width: 83%;"></div>
+                <div class="meter-fill-gap" id="meter-fill-gap" style="width: 17%;"></div>
+              </div>
+              <div class="helper">Blue: planned flight hours &middot; Amber: daily minimum shortfall (if any)</div>
+            </div>
+
+            <!-- Calculation Breakdown Table -->
+            <div class="table-wrap">
+              <table class="data-table">
+                <tbody>
+                  <tr>
+                    <td>Calendar Duration</td>
+                    <td class="num" id="brk-days">2 days</td>
+                  </tr>
+                  <tr>
+                    <td>Daily Minimum Requirement</td>
+                    <td class="num" id="brk-min-hrs">3.0 hrs (1.5h/day)</td>
+                  </tr>
+                  <tr>
+                    <td>Planned Flight Hours</td>
+                    <td class="num" id="brk-est-hrs">2.5 hrs</td>
+                  </tr>
+                  <tr>
+                    <td>Applied Rate (Wet incl. VAT)</td>
+                    <td class="num" id="brk-rate">&euro;210.00 / hr (&euro;3.50/min)</td>
+                  </tr>
+                  <tr id="brk-split-row" style="display: none;">
+                    <td>Per-Pilot Share (Syndicate)</td>
+                    <td class="num" id="brk-split-cost">&euro;210.00 / pilot</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Log Provisional Request Form -->
+          <div class="tile" style="display: grid; gap: var(--space-md);">
+            <span class="label">Step 2 &middot; Save Provisional Booking Request</span>
+            <div class="field-row-2">
+              <div class="field-group">
+                <label class="field-label" for="input-pilot-name">Lead Pilot / Syndicate Name</label>
+                <input class="field-input" type="text" id="input-pilot-name" placeholder="e.g. J. Peeters or Syndicate Alpha">
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="input-route-note">Planned Route / Purpose</label>
+                <input class="field-input" type="text" id="input-route-note" placeholder="e.g. EBKT - LFAT - EBKT">
+              </div>
+            </div>
+            <div class="btn-row">
+              <button type="button" class="btn btn-primary" onclick="addBookingRequest()">
+                <span>Log Provisional Request</span>
+                <i data-lucide="calendar-plus" style="width:16px;height:16px;" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="exportBookingsCsv()">
+                <span>Export CSV</span>
+              </button>
+            </div>
+            <div id="booking-form-feedback" class="helper" style="min-height: 1.2em;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Saved Provisional Bookings Ledger -->
+      <div class="tile" style="display: grid; gap: var(--space-md);">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+          <div>
+            <span class="label">Dispatch Queue &middot; Saved Locally in Notebook State</span>
+            <h3 class="subhead" id="bookings-ledger-heading">Provisional Booking Requests (0)</h3>
+          </div>
+          <button type="button" class="btn btn-compact btn-danger-ghost" id="btn-clear-bookings" onclick="clearAllBookings(this)">Clear all requests</button>
+        </div>
+        <div id="bookings-empty-state" class="notice notice-nested">
+          <div class="label">No provisional requests logged</div>
+          <div class="helper">Use the Booking &amp; Cost Estimator above to select dates and log your first flight or multi-day tour request.</div>
+        </div>
+        <div class="table-wrap" id="bookings-table-wrap" style="display: none;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Dates</th>
+                <th>Pilot / Syndicate</th>
+                <th>Route</th>
+                <th class="num">Days</th>
+                <th class="num">Billable Hobbs</th>
+                <th>Tier</th>
+                <th class="num">Est. Total</th>
+                <th class="num">Action</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: PILOT DASHBOARD & ONBOARDING REQUIREMENTS -->
+    <section id="onboarding" class="section-block">
+      <div class="section-head">
+        <div>
+          <span class="label">Section 04 &middot; Qualification, Liability &amp; Operational Rules</span>
+          <h2 class="section-title">Pilot Dashboard &amp; <strong>Onboarding Covenants</strong></h2>
+        </div>
+        <span class="label">Mandatory Review Before First Dispatch</span>
+      </div>
+
+      <div class="split-6-6">
+        <!-- Interactive Eligibility Checklist -->
+        <div class="tile" style="display: grid; gap: var(--space-md);">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+            <div>
+              <span class="label">Pilot Qualification Tracker</span>
+              <h3 class="subhead">Eligibility &amp; Checkout Checklist</h3>
+            </div>
+            <span class="tag" id="checklist-badge">0 / 5 Verified</span>
+          </div>
+
+          <div style="display: grid; gap: var(--space-xs);">
+            <div class="progress-bar-bg" aria-hidden="true">
+              <div class="progress-bar-fill" id="checklist-progress-bar" style="width: 0%;"></div>
+            </div>
+            <span class="helper" id="checklist-status-text">Complete all five verification steps prior to solo PIC dispatch on F-GNIX.</span>
+          </div>
+
+          <div id="checklist-container">
+            <label class="check-item">
+              <input class="check-box" type="checkbox" id="chk-license" onchange="toggleChecklistItem('license', this.checked)">
+              <div>
+                <div style="font-weight: 600;">Valid EASA PPL(A) or LAPL(A) with SEP(land)</div>
+                <div class="helper">Current Single-Engine Piston (land) rating and valid English/French language proficiency endorsement.</div>
+              </div>
+              <span class="label" id="lbl-chk-license">Pending</span>
+            </label>
+
+            <label class="check-item">
+              <input class="check-box" type="checkbox" id="chk-medical" onchange="toggleChecklistItem('medical', this.checked)">
+              <div>
+                <div style="font-weight: 600;">Valid Medical Certificate</div>
+                <div class="helper">Unexpired EASA Class 1, Class 2, or LAPL medical appropriate to your license privileges.</div>
+              </div>
+              <span class="label" id="lbl-chk-medical">Pending</span>
+            </label>
+
+            <label class="check-item">
+              <input class="check-box" type="checkbox" id="chk-checkout" onchange="toggleChecklistItem('checkout', this.checked)">
+              <div>
+                <div style="font-weight: 600;">Mandatory Familiarization Checkout with MikeDelta</div>
+                <div class="helper">Dual check flight (approx. 1.0&ndash;1.5 hrs) covering AA-5 performance, free-castering nosewheel taxi handling, sliding canopy, and emergency procedures.</div>
+              </div>
+              <span class="label" id="lbl-chk-checkout">Pending</span>
+            </label>
+
+            <label class="check-item">
+              <input class="check-box" type="checkbox" id="chk-insurance" onchange="toggleChecklistItem('insurance', this.checked)">
+              <div>
+                <div style="font-weight: 600;">5-Year Claim-Free History &amp; Deductible Acceptance</div>
+                <div class="helper">Axis Specialty underwriting requires 5-year claim-free status (or prior insurer approval) and acceptance of the &euro;1,500 hull deductible.</div>
+              </div>
+              <span class="label" id="lbl-chk-insurance">Pending</span>
+            </label>
+
+            <label class="check-item">
+              <input class="check-box" type="checkbox" id="chk-techlog" onchange="toggleChecklistItem('techlog', this.checked)">
+              <div>
+                <div style="font-weight: 600;">Hobbs / Tach Logging &amp; Pre-Flight Briefing</div>
+                <div class="helper">Confirmed understanding of Hobbs billing, Tach maintenance tracking, oil checks, and Mode S / 8.33 kHz VFR-only equipment limits.</div>
+              </div>
+              <span class="label" id="lbl-chk-techlog">Pending</span>
+            </label>
+          </div>
+
+          <div class="btn-row" style="border-top: var(--rule); padding-top: var(--space-md);">
+            <button type="button" class="btn btn-compact btn-ghost" id="btn-reset-checklist" onclick="resetChecklist(this)">Reset checklist</button>
+          </div>
+        </div>
+
+        <!-- Group Rental Rules & Operational Covenants -->
+        <div style="display: grid; gap: var(--space-md);">
+          <!-- Group Rental Governance -->
+          <div class="tile" style="display: grid; gap: var(--space-sm);">
+            <span class="label">Syndicate Governance &middot; 25h &amp; 50h Group Blocks</span>
+            <h3 class="subhead">Group Rental Rules &amp; Joint Liability</h3>
+            <div class="ruled-list">
+              <div>
+                <div style="font-weight: 600; font-size: 0.9375rem;">Individual Sector PIC Logging</div>
+                <p class="helper">
+                  Only one pilot may act as Pilot-in-Command (PIC) and log flight time per sector. Group members rotate PIC across multi-leg trips under EASA cost-sharing rules (Reg. (EU) No 965/2012 Art. 6(4a)); dual PIC logging is prohibited.
+                </p>
+              </div>
+              <div>
+                <div style="font-weight: 600; font-size: 0.9375rem;">Individual Checkout Requirement</div>
+                <p class="helper">
+                  Signing a group master contract does not confer automatic checkout. Every individual member (3&ndash;4 pilots) must complete their own AA-5 checkout with MikeDelta prior to flying as PIC.
+                </p>
+              </div>
+              <div>
+                <div style="font-weight: 600; font-size: 0.9375rem;">Joint and Several Liability (Hoofdelijke Aansprakelijkheid)</div>
+                <p class="helper">
+                  All syndicate members share joint and several liability for master account balances, unpaid landing/fuel bills, and the <strong>&euro;1,500 hull insurance deductible</strong>. The PIC on an incident sector is primarily liable; if unsettled within 14 days, remaining members are jointly liable and group bookings pause until settled.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Operational Covenants -->
+          <div class="tile" style="display: grid; gap: var(--space-sm);">
+            <span class="label">Contract Terms &middot; Risk &amp; Fuel Protection</span>
+            <h3 class="subhead">Operational Covenants</h3>
+            <div class="ruled-list">
+              <div>
+                <div style="font-weight: 600; font-size: 0.9375rem;">365-Day Block Validity (&ldquo;Use-It-or-Lose-It&rdquo;)</div>
+                <p class="helper">
+                  Prepaid flight blocks (10h, 25h, 50h) expire 365 calendar days from purchase with zero refund or cash-out value. Unused hours may be transferred to another vetted roster pilot for a &euro;50 administrative fee.
+                </p>
+              </div>
+              <div>
+                <div style="font-weight: 600; font-size: 0.9375rem;">Fuel Price Benchmark (&euro;2.25/L Excl. VAT)</div>
+                <p class="helper">
+                  All wet rates are pegged to AVGAS 100LL at EBKT at or below <strong>&euro;2.25/L excl. VAT</strong> (&euro;2.72/L incl. 21% VAT). Fuel price spikes above this benchmark are surcharged strictly on actual fuel burned (~40 L/hr).
+                </p>
+              </div>
+              <div>
+                <div style="font-weight: 600; font-size: 0.9375rem;">Safety-First VFR Weather Force Majeure</div>
+                <p class="helper">
+                  No-show penalties (1.0h for non-weather cancellations under 24h notice) and daily minimums are waived or rescheduled without penalty when VFR minimums at EBKT or along route prevent safe flight.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="border-top: var(--rule); padding-top: var(--space-md); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-md);">
+      <div class="helper">
+        <strong>F-GNIX Operations</strong> &middot; 1976 Grumman AA-5 Traveler (S/N AA5-0643) &middot; Base: Kortrijk-Wevelgem (EBKT) &middot; Managed by MikeDelta for RSLeasing.
+      </div>
+      <div class="label">EASA Part-ML &middot; VFR Day/Night &middot; Insured by Axis Specialty Europe SE</div>
+    </footer>
+
+  </div>
+
+  <api-shim></api-shim>
+
+  <script>
+    const TIERS = {
+      payg: { id: 'payg', name: `Pay-As-You-Go`, rate: 240.00, perMin: 4.00, blockHours: 0, blockTotal: 0, groupEligible: false },
+      '10h': { id: '10h', name: `10-Hour Block`, rate: 225.00, perMin: 3.75, blockHours: 10, blockTotal: 2250.00, groupEligible: false },
+      '25h': { id: '25h', name: `25-Hour Block`, rate: 210.00, perMin: 3.50, blockHours: 25, blockTotal: 5250.00, groupEligible: true },
+      '50h': { id: '50h', name: `50-Hour Block`, rate: 198.00, perMin: 3.30, blockHours: 50, blockTotal: 9900.00, groupEligible: true }
+    };
+
+    const TODAY_ISO = `2026-11-19`;
+    const MONTH_NAMES = [
+      `January`, `February`, `March`, `April`, `May`, `June`,
+      `July`, `August`, `September`, `October`, `November`, `December`
+    ];
+
+    let appState = {
+      startDate: `2026-11-21`,
+      endDate: `2026-11-22`,
+      estimatedHours: 2.5,
+      tierId: `25h`,
+      pilotCount: 1,
+      syndicatePreviewCount: 3,
+      calendarYear: 2026,
+      calendarMonth: 10, // 0-indexed: 10 = November
+      selectingEnd: false,
+      checklist: {
+        license: false,
+        medical: false,
+        checkout: false,
+        insurance: false,
+        techlog: false
+      },
+      bookings: []
+    };
+
+    function parseIsoDate(iso) {
+      const parts = iso.split('-');
+      if (parts.length !== 3) return null;
+      return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    }
+
+    function toIsoDate(year, monthIndex, day) {
+      const m = String(monthIndex + 1).padStart(2, '0');
+      const d = String(day).padStart(2, '0');
+      return `${year}-${m}-${d}`;
+    }
+
+    function formatEur(val) {
+      return `\u20AC${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+
+    function computeTripMetrics() {
+      const s = parseIsoDate(appState.startDate);
+      const e = parseIsoDate(appState.endDate);
+      let days = 1;
+      if (s && e) {
+        const diffMs = e.getTime() - s.getTime();
+        days = Math.max(1, Math.round(diffMs / 86400000) + 1);
+      }
+      const dailyMinimum = days >= 2 ? Number((days * 1.5).toFixed(1)) : 0;
+      const estHours = Math.max(0.5, Number(appState.estimatedHours) || 0.5);
+      const billableHours = Math.max(estHours, dailyMinimum);
+      const tier = TIERS[appState.tierId] || TIERS['25h'];
+      const totalInclVat = billableHours * tier.rate;
+      const totalExclVat = totalInclVat / 1.21;
+      const pilotCount = Math.max(1, Number(appState.pilotCount) || 1);
+      const perPilotCost = totalInclVat / pilotCount;
+      const minGap = Math.max(0, Number((dailyMinimum - estHours).toFixed(1)));
+
+      return {
+        days,
+        dailyMinimum,
+        estHours,
+        billableHours,
+        tier,
+        totalInclVat,
+        totalExclVat,
+        pilotCount,
+        perPilotCost,
+        minGap
+      };
+    }
+
+    async function persistState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+        try {
+          await window.notebookAppApi.setAppState(appState);
+        } catch (err) {
+          // Safe fallback in environments without active backend
+        }
+      }
+    }
+
+    function setGalleryFocus(focus) {
+      const ids = ['all', 'exterior', 'engine', 'interior'];
+      ids.forEach(function (key) {
+        const btn = document.getElementById(`tab-gal-${key}`);
+        if (btn) btn.classList.toggle('is-active', key === focus);
+      });
+
+      const cards = ['exterior', 'engine', 'interior'];
+      cards.forEach(function (key) {
+        const card = document.getElementById(`gal-card-${key}`);
+        if (!card) return;
+        if (focus === 'all') {
+          card.style.display = 'grid';
+          card.classList.remove('is-inspected');
+        } else if (focus === key) {
+          card.style.display = 'grid';
+          card.classList.add('is-inspected');
+        } else {
+          card.style.display = 'none';
+          card.classList.remove('is-inspected');
+        }
+      });
+    }
+
+    function selectTier(tierId) {
+      if (!TIERS[tierId]) return;
+      appState.tierId = tierId;
+      const sel = document.getElementById('select-tier');
+      if (sel) sel.value = tierId;
+
+      Object.keys(TIERS).forEach(function (key) {
+        const card = document.getElementById(`tier-card-${key}`);
+        if (card) card.classList.toggle('is-active', key === tierId);
+      });
+
+      updateEstimatorUI();
+      persistState();
+    }
+
+    function onTierSelectChange(val) {
+      selectTier(val);
+    }
+
+    function setSyndicatePreview(count) {
+      appState.syndicatePreviewCount = count === 4 ? 4 : 3;
+      const btn3 = document.getElementById('btn-syn-3');
+      const btn4 = document.getElementById('btn-syn-4');
+      if (btn3) {
+        btn3.classList.toggle('btn-primary', appState.syndicatePreviewCount === 3);
+        btn3.classList.toggle('btn-secondary', appState.syndicatePreviewCount !== 3);
+      }
+      if (btn4) {
+        btn4.classList.toggle('btn-primary', appState.syndicatePreviewCount === 4);
+        btn4.classList.toggle('btn-secondary', appState.syndicatePreviewCount !== 4);
+      }
+
+      const th = document.getElementById('th-syn-per-pilot');
+      const c25 = document.getElementById('syn-25-cost');
+      const h25 = document.getElementById('syn-25-hrs');
+      const c50 = document.getElementById('syn-50-cost');
+      const h50 = document.getElementById('syn-50-hrs');
+
+      const n = appState.syndicatePreviewCount;
+      if (th) th.textContent = `Per Pilot (${n})`;
+      if (c25) c25.textContent = formatEur(5250 / n);
+      if (h25) h25.textContent = `${(25 / n).toFixed(1)} hrs avg`;
+      if (c50) c50.textContent = formatEur(9900 / n);
+      if (h50) h50.textContent = `${(50 / n).toFixed(1)} hrs avg`;
+
+      persistState();
+    }
+
+    function syncHoursFromSlider(val) {
+      const parsed = Math.min(40, Math.max(0.5, Number(val) || 0.5));
+      appState.estimatedHours = parsed;
+      const numEl = document.getElementById('input-hours');
+      if (numEl) numEl.value = parsed;
+      updateEstimatorUI();
+      persistState();
+    }
+
+    function syncHoursFromInput(val) {
+      const raw = Number(val);
+      const errEl = document.getElementById('estimator-validation-msg');
+      if (isNaN(raw) || raw < 0.5 || raw > 40) {
+        if (errEl) errEl.textContent = `Enter an estimated flight duration between 0.5 and 40.0 Hobbs hours.`;
+        return;
+      }
+      if (errEl) errEl.textContent = ``;
+      appState.estimatedHours = raw;
+      const sliderEl = document.getElementById('slider-hours');
+      if (sliderEl) sliderEl.value = Math.min(24, raw);
+      updateEstimatorUI();
+      persistState();
+    }
+
+    function onPilotSplitChange(val) {
+      appState.pilotCount = Number(val) || 1;
+      updateEstimatorUI();
+      persistState();
+    }
+
+    function onDateInputChange() {
+      const startEl = document.getElementById('input-start-date');
+      const endEl = document.getElementById('input-end-date');
+      const errEl = document.getElementById('estimator-validation-msg');
+      if (!startEl || !endEl) return;
+
+      let startVal = startEl.value || TODAY_ISO;
+      let endVal = endEl.value || startVal;
+
+      if (startVal < TODAY_ISO) {
+        startVal = TODAY_ISO;
+        startEl.value = startVal;
+      }
+      if (endVal < startVal) {
+        endVal = startVal;
+        endEl.value = endVal;
+        if (errEl) errEl.textContent = `Return date adjusted to match departure date.`;
+      } else if (errEl) {
+        errEl.textContent = ``;
+      }
+
+      appState.startDate = startVal;
+      appState.endDate = endVal;
+      appState.selectingEnd = false;
+
+      const sDate = parseIsoDate(startVal);
+      if (sDate) {
+        appState.calendarYear = sDate.getFullYear();
+        appState.calendarMonth = sDate.getMonth();
+      }
+
+      renderCalendar();
+      updateEstimatorUI();
+      persistState();
+    }
+
+    function applyTripPreset(days, estHours) {
+      const start = parseIsoDate(appState.startDate) || parseIsoDate(TODAY_ISO);
+      const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + (days - 1));
+      appState.startDate = toIsoDate(start.getFullYear(), start.getMonth(), start.getDate());
+      appState.endDate = toIsoDate(end.getFullYear(), end.getMonth(), end.getDate());
+      appState.estimatedHours = estHours;
+      appState.selectingEnd = false;
+
+      const startEl = document.getElementById('input-start-date');
+      const endEl = document.getElementById('input-end-date');
+      const sliderEl = document.getElementById('slider-hours');
+      const numEl = document.getElementById('input-hours');
+      if (startEl) startEl.value = appState.startDate;
+      if (endEl) endEl.value = appState.endDate;
+      if (sliderEl) sliderEl.value = Math.min(24, estHours);
+      if (numEl) numEl.value = estHours;
+
+      renderCalendar();
+      updateEstimatorUI();
+      persistState();
+    }
+
+    function shiftCalendarMonth(delta) {
+      let m = appState.calendarMonth + delta;
+      let y = appState.calendarYear;
+      while (m < 0) { m += 12; y -= 1; }
+      while (m > 11) { m -= 12; y += 1; }
+      appState.calendarMonth = m;
+      appState.calendarYear = y;
+      renderCalendar();
+      persistState();
+    }
+
+    function onCalendarDateClick(iso) {
+      if (iso < TODAY_ISO) return;
+      const hint = document.getElementById('calendar-selection-hint');
+
+      if (!appState.selectingEnd) {
+        appState.startDate = iso;
+        appState.endDate = iso;
+        appState.selectingEnd = true;
+        if (hint) hint.textContent = `Departure set to ${iso}. Click a return date (or click the same date again for a 1-day flight).`;
+      } else {
+        if (iso < appState.startDate) {
+          appState.startDate = iso;
+          appState.endDate = iso;
+          appState.selectingEnd = true;
+          if (hint) hint.textContent = `Departure updated to ${iso}. Click a return date to finish.`;
+        } else {
+          appState.endDate = iso;
+          appState.selectingEnd = false;
+          if (hint) hint.textContent = `Selected trip: ${appState.startDate} to ${appState.endDate}.`;
+        }
+      }
+
+      const startEl = document.getElementById('input-start-date');
+      const endEl = document.getElementById('input-end-date');
+      if (startEl) startEl.value = appState.startDate;
+      if (endEl) endEl.value = appState.endDate;
+
+      renderCalendar();
+      updateEstimatorUI();
+      persistState();
+    }
+
+    function isDateBooked(iso) {
+      return appState.bookings.some(function (b) {
+        return iso >= b.startDate && iso <= b.endDate;
+      });
+    }
+
+    function renderCalendar() {
+      const labelEl = document.getElementById('calendar-month-label');
+      const gridEl = document.getElementById('calendar-days-grid');
+      if (!labelEl || !gridEl) return;
+
+      const y = appState.calendarYear;
+      const m = appState.calendarMonth;
+      labelEl.textContent = `${MONTH_NAMES[m]} ${y}`;
+
+      const firstDay = new Date(y, m, 1);
+      const startWeekday = (firstDay.getDay() + 6) % 7; // Monday = 0
+      const daysInMonth = new Date(y, m + 1, 0).getDate();
+
+      let html = ``;
+      for (let i = 0; i < startWeekday; i++) {
+        html += `<div class="cal-day is-outside" aria-hidden="true"></div>`;
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const iso = toIsoDate(y, m, day);
+        const isPast = iso < TODAY_ISO;
+        const isToday = iso === TODAY_ISO;
+        const isStart = iso === appState.startDate;
+        const isEnd = iso === appState.endDate;
+        const isInRange = iso >= appState.startDate && iso <= appState.endDate;
+        const booked = isDateBooked(iso);
+
+        let cls = `cal-day`;
+        if (isToday) cls += ` is-today`;
+        if (isStart || isEnd) {
+          cls += ` is-endpoint`;
+        } else if (isInRange) {
+          cls += ` is-in-range`;
+        }
+
+        const dotHtml = booked ? `<span class="cal-dot" title="Booked request on this date"></span>` : ``;
+        html += `<button type="button" class="${cls}" ${isPast ? 'disabled' : ''} onclick="onCalendarDateClick('${iso}')" aria-label="${iso}${booked ? ' (has logged request)' : ''}"><span>${day}</span>${dotHtml}</button>`;
+      }
+
+      gridEl.innerHTML = html;
+    }
+
+    function updateEstimatorUI() {
+      const m = computeTripMetrics();
+
+      const badge = document.getElementById('out-tier-badge');
+      const totalCost = document.getElementById('out-total-cost');
+      const vatSub = document.getElementById('out-vat-sub');
+      const billHrs = document.getElementById('out-billable-hours');
+      const durSub = document.getElementById('out-duration-sub');
+
+      if (badge) badge.textContent = m.tier.name;
+      if (totalCost) totalCost.textContent = formatEur(m.totalInclVat);
+      if (vatSub) vatSub.textContent = `Excl. 21% VAT: ${formatEur(m.totalExclVat)}`;
+      if (billHrs) billHrs.textContent = `${m.billableHours.toFixed(1)} hrs`;
+      if (durSub) durSub.textContent = m.days === 1 ? `1 calendar day (single-day)` : `${m.days} consecutive days`;
+
+      // Daily Minimum Notice
+      const notice = document.getElementById('out-min-notice');
+      const noticeLbl = document.getElementById('out-min-status-label');
+      const noticeTxt = document.getElementById('out-min-status-text');
+
+      if (notice && noticeLbl && noticeTxt) {
+        notice.classList.remove('notice-success', 'notice-warning');
+        if (m.days === 1) {
+          noticeLbl.textContent = `Single-Day Flight · Exact Hobbs Billing`;
+          noticeTxt.textContent = `Bookings spanning 1 calendar day have no daily minimum. You are billed strictly for ${m.estHours.toFixed(1)} actual Hobbs hours.`;
+        } else if (m.minGap > 0) {
+          notice.classList.add('notice-warning');
+          noticeLbl.textContent = `Daily Minimum Rule Applied (+${m.minGap.toFixed(1)}h Minimum Adjustment)`;
+          noticeTxt.textContent = `${m.days} consecutive days require ${m.dailyMinimum.toFixed(1)} Hobbs hours (1.5h/day). Your ${m.estHours.toFixed(1)}h estimate is adjusted up to ${m.billableHours.toFixed(1)} billable hours.`;
+        } else {
+          notice.classList.add('notice-success');
+          noticeLbl.textContent = `Daily Minimum Requirement Satisfied`;
+          noticeTxt.textContent = `Your ${m.estHours.toFixed(1)}h planned flight time meets or exceeds the ${m.dailyMinimum.toFixed(1)}h minimum (${m.days} days × 1.5h/day).`;
+        }
+      }
+
+      // Meter bar
+      const meterLeft = document.getElementById('meter-left-label');
+      const meterRight = document.getElementById('meter-right-label');
+      const fillEst = document.getElementById('meter-fill-est');
+      const fillGap = document.getElementById('meter-fill-gap');
+      const denom = Math.max(m.billableHours, 0.5);
+      const estPct = Math.min(100, (m.estHours / denom) * 100);
+      const gapPct = Math.max(0, 100 - estPct);
+
+      if (meterLeft) meterLeft.textContent = `Estimated: ${m.estHours.toFixed(1)}h`;
+      if (meterRight) meterRight.textContent = m.days === 1 ? `No Daily Minimum` : `Minimum: ${m.dailyMinimum.toFixed(1)}h`;
+      if (fillEst) fillEst.style.width = `${estPct.toFixed(1)}%`;
+      if (fillGap) fillGap.style.width = `${gapPct.toFixed(1)}%`;
+
+      // Breakdown table
+      const brkDays = document.getElementById('brk-days');
+      const brkMin = document.getElementById('brk-min-hrs');
+      const brkEst = document.getElementById('brk-est-hrs');
+      const brkRate = document.getElementById('brk-rate');
+      const splitRow = document.getElementById('brk-split-row');
+      const splitCost = document.getElementById('brk-split-cost');
+
+      if (brkDays) brkDays.textContent = `${m.days} ${m.days === 1 ? 'day' : 'days'}`;
+      if (brkMin) brkMin.textContent = m.days === 1 ? `0.0 hrs (None)` : `${m.dailyMinimum.toFixed(1)} hrs (1.5h/day)`;
+      if (brkEst) brkEst.textContent = `${m.estHours.toFixed(1)} hrs`;
+      if (brkRate) brkRate.textContent = `${formatEur(m.tier.rate)} / hr (${formatEur(m.tier.perMin)}/min)`;
+
+      if (splitRow && splitCost) {
+        if (m.pilotCount > 1) {
+          splitRow.style.display = 'table-row';
+          splitCost.textContent = `${formatEur(m.perPilotCost)} / pilot (${m.pilotCount} pilots)`;
+        } else {
+          splitRow.style.display = 'none';
+        }
+      }
+    }
+
+    function addBookingRequest() {
+      const pilotInput = document.getElementById('input-pilot-name');
+      const routeInput = document.getElementById('input-route-note');
+      const feedback = document.getElementById('booking-form-feedback');
+
+      const pilotName = pilotInput ? pilotInput.value.trim() : '';
+      const routeNote = routeInput ? routeInput.value.trim() : '';
+
+      if (!pilotName) {
+        if (pilotInput) pilotInput.classList.add('has-error');
+        if (feedback) {
+          feedback.style.color = 'var(--error)';
+          feedback.textContent = `Enter a lead pilot or syndicate name before logging a request.`;
+        }
+        return;
+      }
+      if (pilotInput) pilotInput.classList.remove('has-error');
+
+      const m = computeTripMetrics();
+      const entry = {
+        id: `${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        startDate: appState.startDate,
+        endDate: appState.endDate,
+        days: m.days,
+        estHours: m.estHours,
+        billableHours: m.billableHours,
+        tierName: m.tier.name,
+        totalInclVat: Number(m.totalInclVat.toFixed(2)),
+        pilotCount: m.pilotCount,
+        pilotName: pilotName,
+        routeNote: routeNote || `Local / Regional VFR`
+      };
+
+      appState.bookings.push(entry);
+      if (pilotInput) pilotInput.value = ``;
+      if (routeInput) routeInput.value = ``;
+      if (feedback) {
+        feedback.style.color = 'var(--tertiary)';
+        feedback.textContent = `Request logged for ${entry.pilotName} (${entry.startDate} to ${entry.endDate}, ${entry.billableHours.toFixed(1)}h billable).`;
+      }
+
+      renderBookingsTable();
+      renderCalendar();
+      persistState();
+    }
+
+    function deleteBookingRequest(id) {
+      appState.bookings = appState.bookings.filter(function (b) { return b.id !== id; });
+      renderBookingsTable();
+      renderCalendar();
+      persistState();
+    }
+
+    function clearAllBookings(btn) {
+      if (appState.bookings.length === 0) return;
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = `Confirm clear all (${appState.bookings.length})`;
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.textContent = `Clear all requests`;
+      appState.bookings = [];
+      renderBookingsTable();
+      renderCalendar();
+      persistState();
+    }
+
+    function renderBookingsTable() {
+      const heading = document.getElementById('bookings-ledger-heading');
+      const emptyEl = document.getElementById('bookings-empty-state');
+      const wrapEl = document.getElementById('bookings-table-wrap');
+      const tbody = document.getElementById('bookings-table-body');
+      const clearBtn = document.getElementById('btn-clear-bookings');
+
+      if (heading) heading.textContent = `Provisional Booking Requests (${appState.bookings.length})`;
+      if (clearBtn) {
+        clearBtn.disabled = appState.bookings.length === 0;
+        clearBtn.dataset.armed = 'false';
+        clearBtn.textContent = `Clear all requests`;
+      }
+
+      if (appState.bookings.length === 0) {
+        if (emptyEl) emptyEl.style.display = 'grid';
+        if (wrapEl) wrapEl.style.display = 'none';
+        return;
+      }
+
+      if (emptyEl) emptyEl.style.display = 'none';
+      if (wrapEl) wrapEl.style.display = 'block';
+      if (!tbody) return;
+
+      tbody.innerHTML = appState.bookings.map(function (b) {
+        const dateStr = b.startDate === b.endDate ? b.startDate : `${b.startDate} \u2192 ${b.endDate}`;
+        const splitBadge = b.pilotCount > 1 ? ` (${b.pilotCount}p split)` : ``;
+        return `
+          <tr>
+            <td class="mono">${dateStr}</td>
+            <td><strong>${escapeHtml(b.pilotName)}</strong>${splitBadge}</td>
+            <td>${escapeHtml(b.routeNote)}</td>
+            <td class="num">${b.days}</td>
+            <td class="num">${b.billableHours.toFixed(1)}h</td>
+            <td>${escapeHtml(b.tierName)}</td>
+            <td class="num"><strong>${formatEur(b.totalInclVat)}</strong></td>
+            <td class="num">
+              <button type="button" class="btn btn-compact btn-ghost" onclick="deleteBookingRequest('${b.id}')" style="color: var(--error);">Remove</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function exportBookingsCsv() {
+      const feedback = document.getElementById('booking-form-feedback');
+      if (appState.bookings.length === 0) {
+        if (feedback) {
+          feedback.style.color = 'var(--warning)';
+          feedback.textContent = `Log at least one booking request before exporting CSV.`;
+        }
+        return;
+      }
+      const header = `Start Date,End Date,Days,Pilot/Syndicate,Pilot Split,Route,Est Hobbs,Billable Hobbs,Tier,Total Incl VAT (EUR)`;
+      const rows = appState.bookings.map(function (b) {
+        return [
+          b.startDate, b.endDate, b.days,
+          `"${String(b.pilotName).replace(/"/g, '""')}"`,
+          b.pilotCount,
+          `"${String(b.routeNote).replace(/"/g, '""')}"`,
+          b.estHours, b.billableHours,
+          `"${b.tierName}"`,
+          b.totalInclVat.toFixed(2)
+        ].join(',');
+      });
+      const csv = `${header}\n${rows.join('\n')}`;
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === 'function') {
+        window.notebookAppApi.triggerFileDownload({
+          content: csv,
+          contentType: 'text/csv',
+          encoding: 'UTF-8',
+          filename: 'F-GNIX-booking-requests.csv'
+        });
+        if (feedback) {
+          feedback.style.color = 'var(--tertiary)';
+          feedback.textContent = `Exported ${appState.bookings.length} booking request(s) to CSV.`;
+        }
+      }
+    }
+
+    function toggleChecklistItem(key, checked) {
+      appState.checklist[key] = Boolean(checked);
+      updateChecklistUI();
+      persistState();
+    }
+
+    function resetChecklist(btn) {
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = `Click again to reset`;
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.textContent = `Reset checklist`;
+      Object.keys(appState.checklist).forEach(function (k) {
+        appState.checklist[k] = false;
+      });
+      updateChecklistUI();
+      persistState();
+    }
+
+    function updateChecklistUI() {
+      const keys = Object.keys(appState.checklist);
+      let done = 0;
+      keys.forEach(function (k) {
+        const val = Boolean(appState.checklist[k]);
+        if (val) done += 1;
+        const chk = document.getElementById(`chk-${k}`);
+        const lbl = document.getElementById(`lbl-chk-${k}`);
+        if (chk) chk.checked = val;
+        if (lbl) {
+          lbl.textContent = val ? `Verified` : `Pending`;
+          lbl.style.color = val ? `var(--tertiary)` : `var(--on-surface-variant)`;
+        }
+      });
+
+      const badge = document.getElementById('checklist-badge');
+      const bar = document.getElementById('checklist-progress-bar');
+      const statusTxt = document.getElementById('checklist-status-text');
+
+      if (badge) badge.textContent = `${done} / ${keys.length} Verified`;
+      if (bar) bar.style.width = `${(done / keys.length) * 100}%`;
+      if (statusTxt) {
+        statusTxt.textContent = done === keys.length
+          ? `All five onboarding requirements verified. Eligible for PIC dispatch on F-GNIX.`
+          : `Complete all five verification steps prior to solo PIC dispatch on F-GNIX.`;
+      }
+    }
+
+    function restoreUIFromState() {
+      const startEl = document.getElementById('input-start-date');
+      const endEl = document.getElementById('input-end-date');
+      const sliderEl = document.getElementById('slider-hours');
+      const numEl = document.getElementById('input-hours');
+      const tierEl = document.getElementById('select-tier');
+      const pilotsEl = document.getElementById('select-pilots');
+
+      if (startEl) startEl.value = appState.startDate;
+      if (endEl) endEl.value = appState.endDate;
+      if (sliderEl) sliderEl.value = Math.min(24, appState.estimatedHours);
+      if (numEl) numEl.value = appState.estimatedHours;
+      if (tierEl) tierEl.value = appState.tierId;
+      if (pilotsEl) pilotsEl.value = String(appState.pilotCount);
+
+      selectTier(appState.tierId);
+      setSyndicatePreview(appState.syndicatePreviewCount);
+      renderCalendar();
+      updateEstimatorUI();
+      renderBookingsTable();
+      updateChecklistUI();
+    }
+
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            appState = Object.assign({}, appState, saved);
+            if (saved.checklist) {
+              appState.checklist = Object.assign({}, appState.checklist, saved.checklist);
+            }
+            if (!Array.isArray(saved.bookings)) {
+              appState.bookings = [];
+            }
+          }
+        } catch (err) {
+          // Proceed with default state
+        }
+      }
+
+      restoreUIFromState();
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
